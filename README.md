@@ -1,34 +1,44 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Node.js runs natively on M1 MacBook
+
+This project is done on a M1 MacBook with Node.js running natively.
+It is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
-First, run the development server:
+First, install `nvm` according to [nvm installation instructions] (https://github.com/nvm-sh/nvm#installing-and-updating).
+Then, install the latest Node.js LTS version.
 
 ```bash
-npm run dev
-# or
-yarn dev
+nvm install v14.15.4
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Since no precompiled binaries are availble for ARM64, `nvm` install Node.js from source. It takes a little time, but completes without any issues.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+After Node.js is installed, we create the Next.js app and run.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+```bash
+npx create-next-app my-test-next-app
+cd my-test-next-app
+npm run dev
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Open [http://localhost:3000](http://localhost:3000) with browser to see the result.
 
-## Learn More
+## Developing the app
 
-To learn more about Next.js, take a look at the following resources:
+Following the [tutoria](https://nextjs.org/learn/basics/create-nextjs-app) everything went smooth other than installing one Node.js package - `remark`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Native dependencies with remark
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The tutorial uses npm packages `remark` and `remark-html` to parse markdown. However, `remark` has an optional dependency with another Node.js package `sharp` which fails to get installed. 
 
-## Deploy on Vercel
+It seems `sharp` has a dependency with a native library `libvips`. There is not prebuilt `libvips` for ARM64, so during the installation process it attempts to compile and install the library, but fails with error `../src/common.cc:24:10: fatal error: 'vips/vips8' file not found`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+However, that did not affect the function of the app as `remark` was able to parse all the markdown syntax in this tutorial.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Summing up
+
+It's great to see Node.js working natively on M1.
+
+
+
